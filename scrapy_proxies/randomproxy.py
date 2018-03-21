@@ -36,6 +36,7 @@ class RandomProxy(object):
         self.proxy_list = settings.get('PROXY_LIST')
         self.chosen_proxy = ''
 
+        proxy_pattern = '(\w+://)([^:]+?:.+@)?(.+)'
         if self.mode == Mode.RANDOMIZE_PROXY_EVERY_REQUESTS or self.mode == Mode.RANDOMIZE_PROXY_ONCE:
             if self.proxy_list is None:
                 raise KeyError('PROXY_LIST setting is missing')
@@ -43,7 +44,7 @@ class RandomProxy(object):
             fin = open(self.proxy_list)
             try:
                 for line in fin.readlines():
-                    parts = re.match('(\w+://)([^:]+?:.+@)?(.+)', line.strip())
+                    parts = re.match(proxy_pattern, line.strip())
                     if not parts:
                         continue
 
@@ -61,7 +62,7 @@ class RandomProxy(object):
         elif self.mode == Mode.SET_CUSTOM_PROXY:
             custom_proxy = settings.get('CUSTOM_PROXY')
             self.proxies = {}
-            parts = re.match('(\w+://)([^:]+?:[^@]+?@)?(.+)', custom_proxy.strip())
+            parts = re.match(proxy_pattern, custom_proxy.strip())
             if not parts:
                 raise ValueError('CUSTOM_PROXY is not well formatted')
 
