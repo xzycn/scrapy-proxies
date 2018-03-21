@@ -43,7 +43,7 @@ class RandomProxy(object):
             fin = open(self.proxy_list)
             try:
                 for line in fin.readlines():
-                    parts = re.match('(\w+://)([^:]+?:[^@]+?@)?(.+)', line.strip())
+                    parts = re.match('(\w+://)([^:]+?:.+@)?(.+)', line.strip())
                     if not parts:
                         continue
 
